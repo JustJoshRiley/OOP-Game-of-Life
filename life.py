@@ -6,7 +6,7 @@ import random
 # life class, includes birthdate for being born, deathdate for dying, winning and losing at life.
 class Life: 
 
-    # instantiate life with birthdate, deathdate, winner, loser 
+    # instantiate life with birthdate, 
     def __init__(self, name, country):
         self.name = name
         self.country = country
@@ -131,6 +131,7 @@ if __name__ == "__main__":
     test.start_a_career()
     test_country = test.move_country()
     test_age = test.turn_forty(test)
+    
     testing_baby = Baby("Josh", "USA", test_age, "null")
     testing_baby.new_baby("Jared")
     testing_baby.baby_get_older()
