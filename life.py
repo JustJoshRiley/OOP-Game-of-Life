@@ -18,29 +18,31 @@ class Life:
         random_day = date.fromordinal(random.randint(start_dt, end_dt))
         # asking for the users first 'answer' or input to start the game
         answer_one = str(input('Would you like to begin the game of life...? ("yes" or "no") : '))
-
         if (answer_one.lower() == 'yes' or answer_one.lower() == 'y'):
             #altering the self.person attribute for the life class with input from prompt for user
             self.name = str(input('Hey there baby person! \n  Welcome, You get to choose a name! \n What do you want to be called...? ("Please enter a string") : ' ))
             self.country = str(input(f'Oi! Almost forgot! What Country are you from {self.name}...? ("Please enter a string) : '))
             return print(f'Wow! Its great to meet you {self.name}! welcome to life! You were born on {random_day} in {self.country}!')
-        pass
-    
+        else:
+            return self.begin_life()
+
     def risk_of_dying(self):
-        
-        final_wish = str(input(f'{self.name}, you have lived a great life. You have lived life. Was it prosperous? Thats up to you. What is your final wish? :  '))
-        return (print(f'That is a TERRIBLE FINAL WISH, Never Before has the game encountered someone who {final_wish}!!  \n Now you are at risk of dying {self.name} !'))
+        final_wish = str(input(f'\n {self.name}, you have lived a great life living in {self.country}. Was it prosperous? Thats up to you. \n What is your final wish? :  '))
+        return (print(f' \n That is a TERRIBLE FINAL WISH, Never Before has the game encountered someone who {final_wish}!!  \n Now you are at risk of dying {self.name} !'))
+
 
 
 
 # class person inherits from life, using self.country and self.name provides method to age(by 20 years) and to set/move countires
 class Adult(Life):
     # instantiate the inherited name and age
-    def __init__(self, name, country, age = 0, career = 'none'):
+    def __init__(self, name, country, age = 0, career = 'none', ):
         super().__init__(name, country)
         # protect the age so its only modifiable in the subclass
         self._age = age
         self._career = career
+        self.children = []
+        self.house = []
 
     def age_twenty_years(self, age):
         self._age = 20
@@ -48,13 +50,14 @@ class Adult(Life):
 
     def turn_forty(self, age):
         self._age = 40
-        return self._age 
+        return self._age
 
     def move_country(self):
         self.age_twenty_years(self._age)
         new_country = str(input(f'Hey there {self.name}! You just turned {self._age}! \n You get to move countries if you would like. Right now you are in {self.country}, where would you like to move? ("Please enter a string") : '))
         self.country = new_country
-        return print(f'Hey There! {self.name}! Welcome to {self.country}')
+        print(f'Hey There! {self.name}! Welcome to {self.country}. \n You met someone and decided to stay and adopt a child!! \n \n ')
+        return self.have_a_baby()
 
     def start_a_career(self):
         # decide on the career, job or college at 18
@@ -78,28 +81,39 @@ class Adult(Life):
                 elif (users_job == 4):
                     self._career = 'University Student'
                     return print(f'Aye! Welcome to the Minor Leagues Freshmeat {self.name} you are now in debt by $115,000! Its ok! You are only {user_is_eighteen}! Also life has fast forwarded 22 years')
-                
             elif (user_option.lower() == 'college'):
                 self._career = 'University Student'
                 print(f'Aye! Welcome to the Minor Leagues Freshmeat {self.name} you are now in debt by $115,000! Its ok! You are only {user_is_eighteen}! Also life has fast forwarded 22 years')
             else:
+                print(f'Now that there is too bad, you want to do "{user_option}"!?! That is crazy talk you have something coming for you! \n \n ')
                 user_is_eighteen = 40
+                return self.move_country()
+
+    def have_a_baby(self):
+        baby_name = str(input(f'Hey Congrats on your new baby! What do you want to name them? : '))
+        baby = Baby(self.name, baby_name, self.country, 0)
+        self.children.append(baby)
+        print(f' \n Achievement! {self.name} has a new baby named {baby_name} + 25 points! \n Now you cannot have a baby amd NOT have a house now can you? \n lets skip the next couple of years shall we? \n')
+        return self.buy_a_house()
+
+    def buy_a_house(self):
+        house_buying_age = self.turn_forty(self._age)
+        address = input(f" \n Congrats you are now {house_buying_age}! We call that House Buying Age! Whats your new address? : ")
+        self.house.append(address)
+        return Baby.baby_get_older(Baby)
+
 
 class Baby(Adult):
-    def __init__(self, name, country, age, baby_name, baby_age = 0):
-        super().__init__(name, country, age)
-        self.baby_name = baby_name
-        self.baby_age = baby_age
-
-    # new_baby 
-    def new_baby(self, baby_name):
-        
-        self.baby_name = str(input(f'Hey Congrats on your new baby! What do you want to name them? : '))
-        return print(f'Achievement! {self.name} has a new baby named {self.baby_name} + 25 points')
+    def __init__(self, parent_name, baby_name, baby_country, baby_age ):
+        super().__init__(baby_name, baby_country, baby_age)
+        self.parent_name = parent_name
 
     def baby_get_older(self):
         self.baby_age = 18
-        return print(f'Wow {self.name}, we are Proud of You! Your baby has turned {self.baby_age}! Way to go! +60 points!')
+        return print(f'Wow {self.parent_name}, we are Proud of You! Your baby has turned {self.baby_age}! Way to go! +60 points!')
+
+    def go_to_school(self):
+        pass
 
 
 class Life_is_going_bad():
@@ -118,26 +132,36 @@ class Life_is_going_bad():
                 deporting_you_to_where = str(input(f'Where do you think {self.adult.country} is deporting you to? : '))
                 print(f'{self.adult.name} got deported to {deporting_you_to_where}')
                 pass
-            pass
+            self.adult.buy_a_house()
         else:
-            return print(f'{self.adult.name} died from a sudden heart attack in {self.adult.country} at the age of {self.adult._age}')
+            print(f'{self.adult.name} died from a sudden heart attack in {self.adult.country} at the age of {self.adult._age}')
+            return self.start_over()
+
+    def start_over(self):
+        print("\n \n \n \n \n \n \n \n")
+        starting_over_question = int(input(f'Hey there {self.adult.name}... Sorry to see you go so soon. \n Life is FULL of choices and questions. Just remember to be yourself no matter what happens, good or bad. \n Do you want to play again? \n 1 = yes \n 2 = no : '))
+        if (starting_over_question == 1):
+            pass
+        print(f"thank you for playing {self.adult.name}")
+        quit
 
 
 
 if __name__ == "__main__":
 
     test = Adult('Josh', 'USA', 0, True)
+
+    # print(test.children)
     test.begin_life()
     test.start_a_career()
-    test_country = test.move_country()
+    # test_country = test.move_country()
     test_age = test.turn_forty(test)
-    
-    testing_baby = Baby("Josh", "USA", test_age, "null")
-    testing_baby.new_baby("Jared")
-    testing_baby.baby_get_older()
 
-    test_event = Life_is_going_bad(test, test_age, test_country, "car accident")
-    test_event.series_of_unfortunate_event()
+    # testing_baby = Baby("Josh", "USA", test_age, "null")
+    # # testing_baby.new_baby("Jared")
+    # testing_baby.baby_get_older()
 
-    test.risk_of_dying()
+    # test_event = Life_is_going_bad(test.name, test.country, test_age, "car accident")
+    # test_event.series_of_unfortunate_event()
+# print(test.house)
 
