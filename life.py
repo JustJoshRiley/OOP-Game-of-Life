@@ -47,11 +47,12 @@ class Life:
 class Adult(Life):
     # instantiate the inherited name and age
 
-    # per class
+    # class attributes
     has_house_insurance = False
     monthly_food_budget = 2,000
 
 
+    # instance attributes
     def __init__(self, name, country, age = 0, career = 'none', ):
         super().__init__(name, country)
         # protect the age so its only modifiable in the subclass, each adult will have a unique age and career only accessible and mutable by them,
@@ -131,9 +132,11 @@ class Adult(Life):
         return start_over_instance.series_of_unfortunate_event()
 
 class Baby(Adult):
+    # class attributes
     birth_certificate = False
     grade_in_school = 'A'
 
+    # instance attributes
     def __init__(self, parent_name, name, country, age ):
         super().__init__(name, country, age)
         self.parent_name = parent_name
@@ -152,9 +155,11 @@ class Baby(Adult):
         return print(f'this is your current grade in school {self.grade_in_school}')
 
 class Life_is_going_bad():
+    # class attributes
     is_struggling = True
     is_dead = False
 
+    # instance attributes
     def __init__(self, name, country, age, situation):
         self.adult = Adult(name, country, age) #instantantiating the base
         self.situation = situation
@@ -181,8 +186,9 @@ class Life_is_going_bad():
         starting_over_question = int(input(f'Hey there {self.adult.name}... Sorry to see you go so soon. \n Life is FULL of choices and questions. Just remember to be yourself no matter what happens, good or bad. \n Do you want to play again? \n 1 = yes \n 2 = no : '))
         if (starting_over_question == 1):
             return self.adult.begin_life()
-        print(f"thank you for playing {self.adult.name}")
         self.is_dead = True
+        self.is_struggling = False
+        print(f"thank you for playing {self.adult.name}")
 
 
 if __name__ == "__main__":
