@@ -195,16 +195,18 @@ if __name__ == "__main__":
 
     
     # instantiate life
-    life_test = Life('Jarden', 'France')
-    life_test.risk_of_dying()
+    # life_test = Life('Jarden', 'France')
+    # life_test.risk_of_dying()
     # instantiate Adult
     adult_test = Adult('Josh', 'USA', 0, True)
     adult_test.begin_life()
     adult_test.start_a_career()
     test_age = adult_test.turn_forty(adult_test)
     # instantiate baby
-    testing_baby = Baby("Josh", "USA", test_age, "null")
-    testing_baby.baby_get_older()
+    # testing_baby = Baby("", "USA", test_age, "null")
+    adult_test.have_a_baby()
+    child = adult_test.children[0]
+    child.baby_get_older()
     # instantiate Life is going bad
     test_event = Life_is_going_bad(adult_test.name, adult_test.country, 40, "car accident")
     test_event.series_of_unfortunate_event()
